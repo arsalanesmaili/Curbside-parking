@@ -1,0 +1,54 @@
+ install.packages('support.CEs')
+ 
+ library(support.CEs)
+ 
+ ?support.CEs
+ 
+ #Define attributes
+example <- rotation.design(
+ attribute.names = list(fee_structure = c("pay_per_use", "annual/6 month permit"), 
+                        length = c("30 minutes", "120 minutes", "unlimited"), 
+                        payment_method = c("tap card", "mobile app", "seamless payment")),
+ nalternatives = 2,
+ nblocks = 1,
+ row.renames = FALSE,
+ seed = 987,
+ randomize = TRUE)
+ 
+example
+
+questionnaire(example)
+
+
+example2 <- rotation.design(
+ attribute.names = list(fee_structure = c("pay_per_use", "daily", "6 month", "annual"), 
+                        length = c("30 minutes", "120 minutes", "unlimited"), 
+                        payment_method = c("tap card", "mobile app", "seamless payment"),
+                        CVLZ_extention = c("yes", "no"),
+                        Enforcement_fee = c("$40", "$100", "$500")),
+ nalternatives = 2,
+ nblocks = 1,
+ row.renames = FALSE,
+ seed = 987,
+ randomize = TRUE)
+ 
+example2
+
+questionnaire(example2)
+
+
+
+example3 <- rotation.design(
+ attribute.names = list(length = c("30 minutes", "120 minutes", "unlimited"),
+                        fee = c("250", "1200", "3000", "2.5", "10", "30"),
+                        payment_method = c("tap card", "mobile app", "seamless", "pre-paid"),
+                        Enforcement_fee = c("$50", "$250", "$750")),
+ nalternatives = 2,
+ nblocks = 1,
+ row.renames = FALSE,
+ seed = 999,
+ randomize = TRUE)
+ 
+example3
+
+questionnaire(example3)
