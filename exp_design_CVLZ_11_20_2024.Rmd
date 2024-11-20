@@ -1,0 +1,65 @@
+---
+title: "exp_design"
+author: "Rubina Singh"
+date: "2024-01-25"
+output: html_document
+---
+
+```{r}
+library(AlgDesign)
+
+# Full factorial designs
+full.design <- gen.factorial(c(2, 5, 5, 5, 4, 4), 2, factors="all",varNames=c('PaymentMethod_PPU', 'BasePayment_AP', 'BasePayment_PPU', 'PricePerParking_PPU', 'TotalAllowedParking_AP', 'TotalAllowedParking_PPU'))
+
+
+
+# Store design as a df
+df <- full.design
+```
+
+``` {r}
+n_experiments <- 2000
+
+# Find an optimal fractional design
+frac_design <- optFederov(~., data = full.design, nTrials = n_experiments)
+
+design <- frac_design$design
+```
+
+``` {r}
+# Randomize order of df
+set.seed(650)
+rows <- sample(nrow(design))
+design_rand <- design[rows, ]
+```
+
+``` {r}
+# Label the values for Qualtrics choice experiment
+design_labeled <- design_rand
+
+
+PaymentMethod_labels <- c('Mobile app', 'Tap')
+BasePayment_AP_labels <- c(250, 500, 750, 1000, 1500)
+BasePayment_PPU_labels <- c(0, 25, 50, 75, 100)
+PricePerParking_labels <- c(2.5, 5, 10, 15, 20)
+TotalAllowedParking_labels <- c(30, 50, 120, 180)
+
+
+design_labeled$PaymentMethod_PPU <- factor(design_labeled$PaymentMethod_PPU, levels = 1:2, labels = PaymentMethod_labels)
+design_labeled$BasePayment_AP <- factor(design_labeled$BasePayment_AP, levels = 1:5, labels = BasePayment_AP_labels)
+design_labeled$BasePayment_PPU <- factor(design_labeled$BasePayment_PPU, levels = 1:5, labels = BasePayment_PPU_labels)
+design_labeled$PricePerParking_PPU <- factor(design_labeled$PricePerParking_PPU, levels = 1:5, labels = PricePerParking_labels)
+design_labeled$TotalAllowedParking_AP <- factor(design_labeled$TotalAllowedParking_AP, levels = 1:4, labels = TotalAllowedParking_labels)
+design_labeled$TotalAllowedParking_PPU <- factor(design_labeled$TotalAllowedParking_PPU, levels = 1:4, labels = TotalAllowedParking_labels)
+
+```
+
+``` {r}
+write.csv(design_labeled, "exp_design_6000_03.04.csv", row.names=FALSE)
+```
+
+
+
+
+
+
